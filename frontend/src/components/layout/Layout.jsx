@@ -3,13 +3,13 @@ import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'
 import TopBar from './TopBar'
 
-export default function Layout(){
+export default function Layout() {
   return (
     <div className="app-shell">
       <Sidebar />
-      <div className="main">
+      <div className="main-content">
         <TopBar />
-        <main className="content">
+        <main className="content-body">
           <Outlet />
         </main>
       </div>
