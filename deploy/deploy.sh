@@ -152,13 +152,16 @@ echo "[*] Checking RDS DB Instance (${DB_INSTANCE_ID})..."
 DB_STATUS="$(aws rds describe-db-instances --region "${REGION}" --db-instance-identifier "${DB_INSTANCE_ID}" --query "DBInstances[0].DBInstanceStatus" --output text 2>/dev/null || echo "not-found")"
 
 if [ "${DB_STATUS}" == "not-found" ]; then
-  echo "[+] Provisioning RDS MySQL instance (Free Tier db.t3.micro, 20GB gp2, Single-AZ)..."
+  MYSQL_ENGINE_VER="$(aws rds describe-db-engine-versions --region "${REGION}" --engine mysql \
+    --query "reverse(sort_by(DBEngineVersions[?starts_with(EngineVersion, '8.0')], &EngineVersion))[0].EngineVersion" --output text 2>/dev/null || echo "8.0")"
+  [ -z "${MYSQL_ENGINE_VER}" ] && MYSQL_ENGINE_VER="8.0"
+  echo "[+] Provisioning RDS MySQL instance (${MYSQL_ENGINE_VER}, Free Tier db.t3.micro, 20GB gp2, Single-AZ)..."
   aws rds create-db-instance \
     --region "${REGION}" \
     --db-instance-identifier "${DB_INSTANCE_ID}" \
     --db-instance-class "db.t3.micro" \
     --engine "mysql" \
-    --engine-version "8.0.35" \
+    --engine-version "${MYSQL_ENGINE_VER}" \
     --allocated-storage 20 \
     --storage-type "gp2" \
     --master-username "${DB_USER}" \
