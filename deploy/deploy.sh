@@ -234,14 +234,19 @@ EC2_INSTANCE_ID="$(aws ec2 describe-instances --region "${REGION}" \
   --query "Reservations[0].Instances[0].InstanceId" --output text 2>/dev/null || echo "None")"
 
 if [ "${EC2_INSTANCE_ID}" == "None" ] || [ -z "${EC2_INSTANCE_ID}" ]; then
-  echo "[+] Launching t2.micro EC2 instance (Ubuntu 24.04, Free Tier)..."
+  # Determine free-tier eligible instance type (t2.micro or t3.micro)
+  INSTANCE_TYPE="t3.micro"
+  if aws ec2 describe-instance-types --region "${REGION}" --filters "Name=free-tier-eligible,Values=true" "Name=instance-type,Values=t2.micro" --query "InstanceTypes[0].InstanceType" --output text 2>/dev/null | grep -q "t2.micro"; then
+    INSTANCE_TYPE="t2.micro"
+  fi
+  echo "[+] Launching ${INSTANCE_TYPE} EC2 instance (Ubuntu 24.04, Free Tier)..."
   # Select first subnet with auto-assign public IP or default subnet
   EC2_SUBNET="${SUBNET_IDS[0]}"
   
   EC2_INSTANCE_ID="$(aws ec2 run-instances \
     --region "${REGION}" \
     --image-id "${UBUNTU_AMI}" \
-    --instance-type "t2.micro" \
+    --instance-type "${INSTANCE_TYPE}" \
     --key-name "${KEY_NAME}" \
     --security-group-ids "${EC2_SG_ID}" \
     --subnet-id "${EC2_SUBNET}" \
