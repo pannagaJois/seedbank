@@ -24,7 +24,7 @@ echo "======================================================================"
 # -----------------------------------------------------------------------------
 # 1. Ensure RDS Instance is Available and Endpoint is Resolved
 # -----------------------------------------------------------------------------
-if [ "${RDS_ENDPOINT}" == "creating" ] || [ -z "${RDS_ENDPOINT}" ]; then
+if [ "${RDS_ENDPOINT}" == "creating" ] || [ "${RDS_ENDPOINT}" == "None" ] || [ -z "${RDS_ENDPOINT}" ]; then
   echo "[*] Waiting for RDS DB Instance (${RDS_INSTANCE_ID}) to become available..."
   aws rds wait db-instance-available --region "${AWS_REGION}" --db-instance-identifier "${RDS_INSTANCE_ID}"
   RDS_ENDPOINT="$(aws rds describe-db-instances --region "${AWS_REGION}" --db-instance-identifier "${RDS_INSTANCE_ID}" --query "DBInstances[0].Endpoint.Address" --output text)"
