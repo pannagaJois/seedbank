@@ -1,0 +1,7 @@
+const pool = require('../db/connection');
+
+exports.list = async (req, res, next) => { try { const [rows] = await pool.query('SELECT * FROM recipient ORDER BY recipient_name'); res.json({ success: true, data: rows }); } catch (err) { next(err); } };
+exports.get = async (req, res, next) => { try { const id = req.params.id; const [rows] = await pool.query('SELECT * FROM recipient WHERE recipient_id = ?', [id]); if (!rows[0]) return res.status(404).json({ error: true, message: 'Not found' }); res.json({ success: true, data: rows[0] }); } catch (err) { next(err); } };
+exports.create = async (req, res, next) => { try { const p = req.body; const [r] = await pool.query('INSERT INTO recipient (recipient_name, recipient_type, contact_phone, contact_email, region) VALUES (?,?,?,?,?)', [p.recipient_name, p.recipient_type, p.contact_phone, p.contact_email, p.region]); res.status(201).json({ success: true, data: { id: r.insertId } }); } catch (err) { next(err); } };
+exports.update = async (req, res, next) => { try { const id = req.params.id; await pool.query('UPDATE recipient SET ? WHERE recipient_id = ?', [req.body, id]); res.json({ success: true, message: 'Updated' }); } catch (err) { next(err); } };
+exports.remove = async (req, res, next) => { try { const id = req.params.id; await pool.query('DELETE FROM recipient WHERE recipient_id = ?', [id]); res.json({ success: true, message: 'Deleted' }); } catch (err) { next(err); } };

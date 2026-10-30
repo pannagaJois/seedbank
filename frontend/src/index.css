@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* small layout helpers */
+.app-shell { display: flex; min-height: 100vh; }
+.main { flex: 1; display: flex; flex-direction: column; }
+.topbar { height: 3.5rem; background: white; border-bottom: 1px solid #E9ECEF; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem; }
+.content { padding: 1.5rem; }
+.page-title { font-size: 1rem; font-weight: 600; }
+.card { background: white; border: 1px solid #E9ECEF; border-radius: 0.5rem; padding: 1rem; }
+.nav-link { display: flex; align-items: center; padding: 0.75rem 1rem; color: #D8F3DC; }
+.nav-link.active { background-color: #D8F3DC; color: #1B4332; }

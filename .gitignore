@@ -1,0 +1,70 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+out/
+public/build/
+.next/
+.next/cache/
+.parcel-cache/
+
+# Runtime files
+.env
+.env.local
+.env.*.local
+.env.deploy
+deploy/.env*
+*.pem
+!.env.example
+*.pid
+*.seed
+*.pid.lock
+
+# Logs
+logs/
+*.log
+coverage/
+.nyc_output/
+coverage-final.json
+lcov-report/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Java
+*.class
+
+# Database files (local/dev)
+*.sqlite
+*.db
+*.sql
+*.sql.gz
+!backend/db/schema.sql
+
+# Docker
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Misc
+*.tgz
+*.bak
+*.swp
+*.tmp
